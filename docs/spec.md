@@ -41,8 +41,8 @@ resets combo.
 - **Question shape:** `{ a, b, op, answer }` with `op: "mul"` as the only implemented
   operation in step 1. Distractor generation and adaptive weighting are written
   per-operation so division/addition slot in later without touching the game loop (D7).
-- **Tables config:** player/parent picks included tables, 2–12; default 2–10.
-  Persisted in `rm.settings`.
+- **Tables config:** player/parent picks included tables, 1–10 (D12, was 2–12);
+  default 2–10. Persisted in `rm.settings`.
 - **Smart distractors:** three wrong answers from plausible errors:
   - adjacent table results (6×7 → 36, 48)
   - off-by-one-operand (6×7 → 7×7 = 49)
@@ -52,7 +52,7 @@ resets combo.
   or slowly gain weight; mastered pairs decay. Counters in `rm.analytics`, no ML.
 - **In-run difficulty ramp:** timer shrinks slightly every 5 duels toward a floor of
   70% of the configured base (D2 — proportional, not hardcoded). Later duels weight
-  up the harder tables (7s, 8s, 12s).
+  up the harder tables (7s and 8s).
 
 ## Opponents
 
@@ -84,7 +84,7 @@ Opponent names are display strings → live in `strings.js` per language.
 ## Screens
 
 1. **Title** — logo, Play, Settings, High Scores. A tumbleweed or two.
-2. **Settings** — tables picker (2–12 toggles), timer slider 1–10 s (default 5 s,
+2. **Settings** — tables picker (1–10 toggles), timer slider 1–10 s (default 5 s,
    D11), sound on/off, language sv/en, sound test button.
 3. **Game** — the duel screen (core loop).
 4. **Defeat / run summary** — final score, duels won, best combo; high-score initials
@@ -140,7 +140,7 @@ than multiplication (engine abstracts them, but only `mul` is implemented).
 - Full run playable start → defeat → high score entry → replay, on a phone-sized
   portrait viewport and a Chromebook landscape viewport.
 - All four outcome tiers visually and audibly distinct.
-- Distractors are always plausible (manual spot-check across tables 2–12).
+- Distractors are always plausible (manual spot-check across tables 1–10).
 - Adaptive weighting demonstrably favors weak pairs (verifiable via rm.analytics
   in devtools).
 - Swedish and English both complete; switching language requires no reload glitches.

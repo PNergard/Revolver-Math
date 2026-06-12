@@ -44,10 +44,10 @@ const check = (name, ok, detail = "") => {
 /* Garbage values inside valid JSON → sanitized */
 {
   const { rm } = freshStorage({
-    "rm.settings": JSON.stringify({ tables: [1, 99, "x", 7], timerMs: 999999, sound: 1 }),
+    "rm.settings": JSON.stringify({ tables: [0, 99, "x", 11, 12, 7], timerMs: 999999, sound: 1 }),
   });
   const s = rm.getSettings();
-  check("out-of-range values sanitized",
+  check("out-of-range values sanitized (incl. legacy 11/12)",
     s.tables.join() === "7" && s.timerMs === 5000 && s.sound === true, JSON.stringify(s));
 }
 

@@ -56,7 +56,7 @@
     const picker = document.getElementById("tables-picker");
     // Keep the legend, rebuild the toggles.
     picker.querySelectorAll(".table-toggle").forEach((el) => el.remove());
-    for (let n = 2; n <= 12; n++) {
+    for (let n = 1; n <= 10; n++) {
       const label = document.createElement("label");
       label.className = "table-toggle";
       const input = document.createElement("input");

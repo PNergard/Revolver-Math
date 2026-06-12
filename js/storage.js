@@ -63,9 +63,9 @@
   function getSettings() {
     const s = readJson(KEYS.settings, {});
     const merged = { ...DEFAULT_SETTINGS, ...s };
-    // Sanitize: tables must be a non-empty subset of 2–12.
+    // Sanitize: tables must be a non-empty subset of 1–10.
     if (!Array.isArray(merged.tables)) merged.tables = [...DEFAULT_SETTINGS.tables];
-    merged.tables = merged.tables.filter((n) => Number.isInteger(n) && n >= 2 && n <= 12);
+    merged.tables = merged.tables.filter((n) => Number.isInteger(n) && n >= 1 && n <= 10);
     if (merged.tables.length === 0) merged.tables = [...DEFAULT_SETTINGS.tables];
     merged.timerMs = clamp(merged.timerMs, 1000, 10000, DEFAULT_SETTINGS.timerMs);
     merged.sound = Boolean(merged.sound);

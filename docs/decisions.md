@@ -71,6 +71,18 @@ devices (Chromebooks/desktops), never on touch. Timer slider minimum lowered fro
 3 s (D2) to 1 s for expert players — default and ramp behavior unchanged, D2
 otherwise stands.
 
+**D12 · 2026-06-12 · Tables limited to 1–10; ×11/×12 removed entirely**
+Bug report from Per: his wife deselected 11 and 12 but still got ×11/×12
+questions. Root cause was pool semantics, not settings reading: a pair is
+included when *either* operand's table is enabled, and the free operand always
+ranged over the full 2–12 — so enabling the 3s alone still produced 3×11 and
+3×12. Per's call: drop 11/12 as options altogether and offer tables 1–10
+(default stays 2–10). Operand range is now 1–10 everywhere (pool, products,
+distractors); hard-table ramp is 7s/8s (12 gone); storage sanitization accepts
+1–10 and silently strips legacy 11/12 from saved settings, so existing devices
+need no migration. The either-operand pool semantics stays: enabling table n
+means n×1 … n×10, which can surface an unticked second operand by design.
+
 ---
 
 (Claude Code: append new decisions below with the next ID and date. Never edit or

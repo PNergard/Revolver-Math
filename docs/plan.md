@@ -238,3 +238,10 @@ anything surprising.)
   420→1500→620 Hz) over a soft A gallop (bum–ba-dum). 4.9 s loop, still
   capped at 2 plays. Code paths verified error-free; melody itself needs
   Per's ear test.
+- **2026-06-12 (cont. 12)** — D12: bug report (wife's iPhone got ×11/×12 with
+  those tables deselected). Cause: buildPairPool's free operand spanned 2–12
+  regardless of enabled tables. Per's fix of choice: tables are now 1–10 only.
+  Changed OPERAND_MIN/MAX (questions.js), hard tables 7/8 (12 dropped), picker
+  loop 1–10 (main.js), storage sanitization 1–10 (strips legacy 11/12 — no
+  migration needed), index.html comment, both test harnesses + spec updated.
+  All checks green (`node tests/questions.test.mjs`, `node tests/storage.test.mjs`).

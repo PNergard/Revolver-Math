@@ -9,10 +9,10 @@
   const RM = (globalThis.RM = globalThis.RM || {});
   const { analyticsKey } = RM.storage;
 
-  const OPERAND_MIN = 2;
-  const OPERAND_MAX = 12;
+  const OPERAND_MIN = 1;
+  const OPERAND_MAX = 10;
 
-  /** All products reachable in tables 2–12 — used to keep distractors plausible. */
+  /** All products reachable in tables 1–10 — used to keep distractors plausible. */
   const PRODUCTS = (() => {
     const set = new Set();
     for (let a = OPERAND_MIN; a <= OPERAND_MAX; a++)
@@ -47,7 +47,7 @@
       },
       /** Hard tables that ramp up later in a run. */
       isHardPair(a, b) {
-        return [7, 8, 12].includes(a) || [7, 8, 12].includes(b);
+        return [7, 8].includes(a) || [7, 8].includes(b);
       },
     },
   };
@@ -59,7 +59,7 @@
     return swapped === n ? null : swapped;
   }
 
-  /** Normalized pair pool for the enabled tables: { a, b } with a ≤ b, both 2–12. */
+  /** Normalized pair pool for the enabled tables: { a, b } with a ≤ b, both 1–10. */
   function buildPairPool(tables) {
     const pool = [];
     const enabled = new Set(tables);
@@ -77,7 +77,7 @@
    * - wrong answers push weight up (to ~4x)
    * - slow correct answers push weight up
    * - mastered pairs (3+ right, few wrong, quick) decay hard
-   * Later duels additionally weight up the hard tables (7s, 8s, 12s).
+   * Later duels additionally weight up the hard tables (7s and 8s).
    */
   function pairWeight(pair, stats, { timerMs = 5000, duelIndex = 0, op = "mul" } = {}) {
     let w = 1;

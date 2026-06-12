@@ -35,7 +35,7 @@ const check = (name, ok, detail = "") => {
       !q.options.includes(q.answer) ||
       q.answer !== q.a * q.b ||
       q.options.some((v) => v <= 0) ||
-      q.a < 2 || q.a > 12 || q.b < 2 || q.b > 12
+      q.a < 1 || q.a > 10 || q.b < 1 || q.b > 10
     ) {
       bad = q;
       break;
@@ -45,11 +45,11 @@ const check = (name, ok, detail = "") => {
     bad === null, bad ? JSON.stringify(bad) : "");
 }
 
-/* 2. Every pair 2–12 × 2–12 produces 3 valid distractors (full spot-check). */
+/* 2. Every pair 1–10 × 1–10 produces 3 valid distractors (full spot-check). */
 {
   let bad = null;
-  outer: for (let a = 2; a <= 12; a++) {
-    for (let b = 2; b <= 12; b++) {
+  outer: for (let a = 1; a <= 10; a++) {
+    for (let b = 1; b <= 10; b++) {
       for (let i = 0; i < 20; i++) {
         const d = generateDistractors(a, b);
         if (d.length !== 3 || new Set(d).size !== 3 || d.includes(a * b) || d.some((v) => v <= 0)) {
@@ -59,13 +59,13 @@ const check = (name, ok, detail = "") => {
       }
     }
   }
-  check("all pairs 2–12: 3 unique valid distractors", bad === null,
+  check("all pairs 1–10: 3 unique valid distractors", bad === null,
     bad ? JSON.stringify(bad) : "");
 }
 
 /* 3. Distractor plausibility sample — print a few for eyeballing. */
 {
-  for (const [a, b] of [[6, 7], [3, 4], [9, 12], [2, 2], [12, 12]]) {
+  for (const [a, b] of [[6, 7], [3, 4], [9, 10], [2, 2], [1, 8]]) {
     console.log(`   ${a}×${b}=${a * b} → distractors: ${generateDistractors(a, b).join(", ")}`);
   }
 }
@@ -102,7 +102,7 @@ const check = (name, ok, detail = "") => {
   const pool = buildPairPool([7]);
   const allTouch7 = pool.every((p) => p.a === 7 || p.b === 7);
   check("pool for tables=[7] only contains pairs touching 7",
-    allTouch7 && pool.length === 11, `${pool.length} pairs`);
+    allTouch7 && pool.length === 10, `${pool.length} pairs`);
 }
 
 /* 7. Analytics key normalization (a ≤ b regardless of display order). */
