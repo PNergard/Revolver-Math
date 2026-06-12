@@ -229,3 +229,12 @@ anything surprising.)
   key answers score correctly, keys ignored during resolution, hint renders,
   slider min 1000, storage tests green. Initial git commit made (main branch)
   — ready to push to GitHub for Pages.
+- **2026-06-12 (cont. 11)** — Title tune rewritten as a spaghetti-western
+  homage on Per's request ("Clint Eastwood whistling + nuäh nuäh ähh" =
+  Morricone, The Good the Bad and the Ugly). Deliberately NOT the Morricone
+  melody (copyright) — same texture, original notes: whistled minor-third
+  flutter (C5/A4) → falling tail (C5 G4 E4) → muted-trumpet wah-wah answer
+  (E3 D3 C3 with pitch droop, sawtooth through sweeping bandpass Q7
+  420→1500→620 Hz) over a soft A gallop (bum–ba-dum). 4.9 s loop, still
+  capped at 2 plays. Code paths verified error-free; melody itself needs
+  Per's ear test.

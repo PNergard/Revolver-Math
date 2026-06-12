@@ -200,22 +200,59 @@
     osc.start(at); osc.stop(at + dur + 0.05);
   }
 
-  /** Schedule one pass of the loop starting at `at`; returns its length in s. */
-  function scheduleTitleLoop(c, dest, at) {
-    const BEAT = 0.55; // ~109 bpm, unhurried
-    // D minor, lonesome prairie phrase: D F G A… C A G F D
-    const D4 = 293.66, F4 = 349.23, G4 = 392.0, A4 = 440.0, C5 = 523.25;
-    const melody = [
-      [D4, 0, 1.4], [F4, 1.5, 0.45], [G4, 2, 0.95], [A4, 3, 1.9],
-      [C5, 5, 0.45], [A4, 5.5, 0.45], [G4, 6, 0.95], [D4, 7, 0.9],
-    ];
-    melody.forEach(([f, beat, len]) =>
-      whistleNote(c, dest, f, at + beat * BEAT, len * BEAT));
-    const D2 = 73.42, A2 = 110.0;
-    for (let beat = 0; beat < 8; beat++) {
-      bassNote(c, dest, beat % 2 ? A2 : D2, at + beat * BEAT, BEAT * 0.9);
+  /** Muted-trumpet "wah" — sawtooth through a sweeping bandpass (the mouth
+      opening and closing), with a little pitch droop on release. */
+  function wahNote(c, dest, freq, at, dur, droop = false) {
+    const osc = c.createOscillator();
+    osc.type = "sawtooth";
+    osc.frequency.setValueAtTime(freq, at);
+    if (droop) {
+      osc.frequency.setValueAtTime(freq, at + dur * 0.5);
+      osc.frequency.exponentialRampToValueAtTime(freq * 0.84, at + dur);
     }
-    return 8 * BEAT;
+    const f = c.createBiquadFilter();
+    f.type = "bandpass";
+    f.Q.value = 7;
+    f.frequency.setValueCurveAtTime([420, 1500, 620], at, dur);
+    const g = c.createGain();
+    g.gain.setValueAtTime(0, at);
+    g.gain.linearRampToValueAtTime(0.34, at + 0.05);
+    g.gain.setValueAtTime(0.34, at + dur - 0.12);
+    g.gain.linearRampToValueAtTime(0, at + dur);
+    osc.connect(f).connect(g).connect(dest);
+    osc.start(at);
+    osc.stop(at + dur + 0.05);
+  }
+
+  /** One pass of the title loop (spaghetti-western homage, original melody):
+      whistled flutter → falling tail → muted-trumpet wah-wah answer, over a
+      soft gallop. Returns its length in seconds. */
+  function scheduleTitleLoop(c, dest, at) {
+    const A4 = 440.0, C5 = 523.25, G4 = 392.0, E4 = 329.63;
+    const E3 = 164.81, D3 = 146.83, C3 = 130.81;
+
+    // Whistle flutter (fast alternating minor third), then the falling tail.
+    [C5, A4, C5, A4].forEach((f, i) =>
+      whistleNote(c, dest, f, at + i * 0.095, 0.1));
+    whistleNote(c, dest, C5, at + 0.38, 0.32);
+    whistleNote(c, dest, G4, at + 0.78, 0.36);
+    whistleNote(c, dest, E4, at + 1.2, 0.85);
+
+    // The "nuäh nuäh äähh" answer.
+    wahNote(c, dest, E3, at + 2.35, 0.42);
+    wahNote(c, dest, D3, at + 2.88, 0.42);
+    wahNote(c, dest, C3, at + 3.42, 1.0, true);
+
+    // Soft gallop underneath: bum–ba-dum on A.
+    const A2 = 110.0, A1 = 55.0;
+    for (let bar = 0; bar < 7; bar++) {
+      const t0 = at + bar * 0.65;
+      bassNote(c, dest, A1, t0, 0.3);
+      bassNote(c, dest, A2, t0 + 0.42, 0.12);
+      bassNote(c, dest, A2, t0 + 0.54, 0.12);
+    }
+
+    return 4.9;
   }
 
   const TITLE_MUSIC_LOOPS = 2; // then go quiet — looping forever gets annoying
