@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Snabbast i Västern / Revolver Math — a quick-draw multiplication duel.">
+  <meta name="theme-color" content="#8fc1d4">
+  <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+  <title>Snabbast i Västern</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+  <main id="app">
+
+    <!-- Title screen -->
+    <section id="screen-title" class="screen" data-screen="title">
+      <h1 id="title-logo">
+        <span data-str="gameTitle"></span>
+        <span class="bullet-hole" aria-hidden="true"></span>
+        <span class="bullet-hole" aria-hidden="true"></span>
+        <span class="bullet-hole" aria-hidden="true"></span>
+      </h1>
+      <div class="menu">
+        <button id="btn-play" class="btn btn-primary" data-str="play"></button>
+        <button id="btn-settings" class="btn" data-str="settings"></button>
+        <button id="btn-highscores" class="btn" data-str="highScores"></button>
+      </div>
+      <div class="tumbleweed tw-1" aria-hidden="true"><div class="tw-body"></div></div>
+      <div class="tumbleweed tw-2" aria-hidden="true"><div class="tw-body"></div></div>
+      <div class="tumbleweed tw-3" aria-hidden="true"><div class="tw-body"></div></div>
+    </section>
+
+    <!-- Settings screen -->
+    <section id="screen-settings" class="screen" data-screen="settings" hidden>
+      <h2 data-str="settings"></h2>
+      <div id="settings-form">
+        <fieldset id="tables-picker">
+          <legend data-str="tables"></legend>
+          <!-- table toggles 2–12 injected by main.js -->
+        </fieldset>
+        <div class="setting-row">
+          <label for="timer-slider" data-str="timer"></label>
+          <input type="range" id="timer-slider" min="1000" max="10000" step="500">
+          <output id="timer-value"></output>
+        </div>
+        <div class="setting-row">
+          <label for="sound-toggle" data-str="sound"></label>
+          <input type="checkbox" id="sound-toggle">
+        </div>
+        <div class="setting-row">
+          <button id="btn-test-sound" class="btn btn-small" data-str="testSound"></button>
+        </div>
+        <div class="setting-row">
+          <label for="lang-select" data-str="language"></label>
+          <select id="lang-select">
+            <option value="sv">Svenska</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+      </div>
+      <button id="btn-settings-back" class="btn" data-str="back"></button>
+    </section>
+
+    <!-- Game screen (duel) -->
+    <section id="screen-game" class="screen" data-screen="game" hidden>
+      <div id="hud">
+        <div id="hud-lives" aria-label="lives"></div>
+        <div id="hud-score">0</div>
+        <div id="hud-combo" aria-label="combo"></div>
+      </div>
+      <div id="duel-stage">
+        <div id="player-area" aria-hidden="true">
+          <div id="player-figure" class="gunslinger player">
+            <div class="hat"></div>
+            <div class="head"></div>
+            <div class="torso"></div>
+            <div class="arm off-arm"></div>
+            <div class="arm gun-arm"><div class="gun"></div></div>
+            <div class="leg leg-l"></div>
+            <div class="leg leg-r"></div>
+            <div class="flash"></div>
+          </div>
+          <div class="dust"></div>
+          <div class="stars">✨⭐✨</div>
+        </div>
+        <div id="opponent-area" aria-hidden="true">
+          <div id="opponent-name" class="name-plate"></div>
+          <div class="barrel"></div>
+          <div id="opponent-figure" class="gunslinger outlaw">
+            <div class="hat"></div>
+            <div class="head"></div>
+            <div class="torso"></div>
+            <div class="arm off-arm"></div>
+            <div class="arm gun-arm"><div class="gun"></div></div>
+            <div class="leg leg-l"></div>
+            <div class="leg leg-r"></div>
+            <div class="flash"></div>
+          </div>
+        </div>
+      </div>
+      <div id="question-area">
+        <div id="question-text"></div>
+        <div id="countdown-bar"><div id="countdown-fill"></div></div>
+        <div id="answer-grid">
+          <button class="btn answer-btn" data-slot="0" data-key="1"></button>
+          <button class="btn answer-btn" data-slot="1" data-key="2"></button>
+          <button class="btn answer-btn" data-slot="2" data-key="3"></button>
+          <button class="btn answer-btn" data-slot="3" data-key="4"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Defeat / run summary screen -->
+    <section id="screen-summary" class="screen" data-screen="summary" hidden>
+      <h2 data-str="runOver"></h2>
+      <div id="summary-stats">
+        <div class="stat" id="summary-badge" hidden></div>
+        <div class="stat"><span data-str="finalScore"></span> <output id="summary-score"></output></div>
+        <div class="stat"><span data-str="duelsWon"></span> <output id="summary-duels"></output></div>
+        <div class="stat"><span data-str="bestCombo"></span> <output id="summary-combo"></output></div>
+      </div>
+      <div id="initials-entry" hidden>
+        <p data-str="newHighScore"></p>
+        <input type="text" id="initials-input" maxlength="3" autocomplete="off"
+               autocapitalize="characters" spellcheck="false">
+        <button id="btn-initials-ok" class="btn btn-primary" data-str="ok"></button>
+      </div>
+      <button id="btn-play-again" class="btn btn-primary" data-str="playAgain"></button>
+      <button id="btn-summary-title" class="btn" data-str="backToTitle"></button>
+    </section>
+
+    <!-- High scores screen -->
+    <section id="screen-highscores" class="screen" data-screen="highscores" hidden>
+      <h2 data-str="highScores"></h2>
+      <ol id="highscore-list"></ol>
+      <button id="btn-highscores-back" class="btn" data-str="back"></button>
+    </section>
+
+  </main>
+  <!-- Classic scripts in dependency order (D8) — works from file:// with no server. -->
+  <script src="js/strings.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/questions.js"></script>
+  <script src="js/opponents.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

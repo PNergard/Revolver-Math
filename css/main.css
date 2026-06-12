@@ -1,0 +1,598 @@
+/* RevolverMath — desert palette, chunky cartoon UI. Portrait-first; landscape
+   (Chromebook) layout via media query at the bottom. */
+
+:root {
+  /* Warm desert palette — flat cartoon, chunky outlines */
+  --sand: #e8c27a;
+  --sand-dark: #d6a85e;
+  --sand-light: #f5dca8;
+  --sunset: #e07a3f;
+  --cactus: #5e8c4a;
+  --sky: #8fc1d4;
+  --sky-high: #a7d6e6;
+  --leather: #8a5a33;
+  --wood: #a9743f;
+  --ink: #3a2a1a;
+  --paper: #fff6e0;
+  --danger: #c0392b;
+  --gold: #f1c40f;
+
+  --outline: 3px solid var(--ink);
+  --radius: 12px;
+  --shadow: 0 4px 0 var(--ink);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Author display rules (flex/grid) must never override the hidden attribute. */
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: "Trebuchet MS", "Segoe UI", Verdana, sans-serif;
+  /* Same horizon as .screen so the edges blend when #app is narrower than the window */
+  background: linear-gradient(
+    180deg,
+    var(--sky-high) 0%,
+    var(--sky) 42%,
+    var(--sand-light) 53%,
+    var(--sand) 62%,
+    var(--sand-dark) 92%,
+    #b88a48 92.5%
+  );
+  color: var(--ink);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#app {
+  height: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Every screen shares the desert horizon backdrop: sun, sand, and a darker
+   dirt strip with pebbles along the bottom. */
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 1rem;
+  background:
+    radial-gradient(circle 4px at 12% 97%, #9c7440 99%, transparent),
+    radial-gradient(circle 3px at 35% 95.5%, #a87f43 99%, transparent),
+    radial-gradient(circle 4px at 58% 97.5%, #9c7440 99%, transparent),
+    radial-gradient(circle 3px at 78% 96%, #a87f43 99%, transparent),
+    radial-gradient(circle 4px at 92% 97%, #9c7440 99%, transparent),
+    radial-gradient(circle at 82% 14%, var(--gold) 0 7%, rgba(241, 196, 15, 0.35) 9%, transparent 13%),
+    linear-gradient(
+      180deg,
+      var(--sky-high) 0%,
+      var(--sky) 42%,
+      var(--sand-light) 53%,
+      var(--sand) 62%,
+      var(--sand-dark) 92%,
+      #b88a48 92.5%
+    );
+}
+
+.screen[hidden] {
+  display: none;
+}
+
+h1,
+h2 {
+  margin: 0;
+  text-align: center;
+}
+
+h2 {
+  color: var(--leather);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-shadow: 2px 2px 0 var(--paper);
+}
+
+/* Title logo on a wooden sign */
+#title-logo {
+  font-size: clamp(1.7rem, 8vw, 2.8rem);
+  color: var(--paper);
+  text-shadow: 2px 2px 0 var(--ink);
+  background: linear-gradient(var(--wood), var(--leather));
+  border: var(--outline);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 0.5em 0.7em;
+  transform: rotate(-2deg);
+}
+
+/* Cactus scenery on the title screen */
+#screen-title::after {
+  content: "";
+  position: absolute;
+  bottom: 12%;
+  right: 8%;
+  width: 56px;
+  height: 84px;
+  background: url("../assets/cactus.svg") no-repeat center / contain;
+  pointer-events: none;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  width: min(80%, 320px);
+}
+
+/* Buttons — chunky cartoon style, ≥64px touch targets */
+.btn {
+  font: inherit;
+  font-size: 1.2rem;
+  font-weight: bold;
+  min-height: 64px;
+  padding: 0.6rem 1.2rem;
+  color: var(--ink);
+  background: var(--paper);
+  border: var(--outline);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--ink);
+}
+
+.btn:focus-visible {
+  outline: 3px dashed var(--sunset);
+  outline-offset: 3px;
+}
+
+.btn-primary {
+  background: var(--sunset);
+  color: var(--paper);
+  text-shadow: 1px 1px 0 var(--ink);
+}
+
+.btn-small {
+  min-height: 48px;
+  font-size: 1rem;
+}
+
+/* ---------- Settings ---------- */
+
+#settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: min(90%, 380px);
+  background: var(--paper);
+  border: var(--outline);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem;
+}
+
+#settings-form input,
+#settings-form select {
+  accent-color: var(--cactus);
+}
+
+#settings-form select {
+  font: inherit;
+  font-weight: bold;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--sand-light);
+  padding: 0.3rem 0.5rem;
+}
+
+#tables-picker {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+#tables-picker legend {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.table-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  border: var(--outline);
+  border-radius: var(--radius);
+  background: var(--sand-light);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.table-toggle input {
+  position: absolute;
+  opacity: 0;
+}
+
+.table-toggle:has(input:checked) {
+  background: var(--cactus);
+  color: var(--paper);
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.setting-row label {
+  flex: 1;
+  font-weight: bold;
+}
+
+.setting-row input[type="range"] {
+  flex: 2;
+}
+
+.setting-row input[type="checkbox"] {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+/* ---------- Game screen ---------- */
+
+#screen-game {
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+#hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-weight: bold;
+}
+
+#hud-lives {
+  font-size: 1.6rem;
+  color: var(--danger);
+  text-shadow: 1px 1px 0 var(--paper);
+  letter-spacing: 0.1em;
+}
+
+#hud-score {
+  font-size: 1.4rem;
+  background: var(--paper);
+  border: var(--outline);
+  border-radius: var(--radius);
+  padding: 0.05em 0.7em;
+  min-width: 4.5em;
+  text-align: center;
+}
+
+#hud-combo .star {
+  font-size: 1.5rem;
+  color: rgba(58, 42, 26, 0.25);
+  text-shadow: 1px 1px 0 var(--paper);
+}
+
+#hud-combo .star.filled {
+  color: var(--gold);
+  text-shadow: 1px 1px 0 var(--ink);
+}
+
+#duel-stage {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  min-height: 120px;
+  padding: 0 0.5rem 0.4rem;
+}
+
+/* Lone cactus between the duelists */
+#duel-stage::before {
+  content: "";
+  position: absolute;
+  bottom: 0.6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 66px;
+  background: url("../assets/cactus.svg") no-repeat center / contain;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+#opponent-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.name-plate {
+  font-weight: bold;
+  font-size: 0.95rem;
+  color: var(--paper);
+  text-shadow: 1px 1px 0 var(--ink);
+  background: linear-gradient(var(--wood), var(--leather));
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  padding: 0.2em 0.7em;
+  white-space: nowrap;
+}
+
+#opponent-area.boss .name-plate {
+  background: linear-gradient(#f8d44c, var(--gold));
+  color: var(--ink);
+  text-shadow: 1px 1px 0 var(--paper);
+}
+
+#question-area {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+#question-text {
+  font-size: clamp(2rem, 11vw, 3.2rem);
+  font-weight: bold;
+  text-align: center;
+  background: var(--paper);
+  border: var(--outline);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 0.05em 0.6em;
+  width: fit-content;
+  min-width: 60%;
+  margin: 0 auto;
+  min-height: 1.4em;
+}
+
+#countdown-bar {
+  height: 22px;
+  width: 100%;
+  background: var(--paper);
+  border: var(--outline);
+  border-radius: 11px;
+  overflow: hidden;
+}
+
+#countdown-fill {
+  height: 100%;
+  width: 100%;
+  background: var(--cactus);
+  transform-origin: left;
+}
+
+#answer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.answer-btn {
+  min-height: 72px;
+  font-size: 1.7rem;
+  position: relative;
+}
+
+.answer-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Keyboard hint (press 1–4) — only where a keyboard is likely present */
+.answer-btn::before {
+  content: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .answer-btn::before {
+    content: attr(data-key);
+    position: absolute;
+    top: 4px;
+    left: 9px;
+    font-size: 0.85rem;
+    opacity: 0.4;
+  }
+}
+
+/* ---------- Summary (wanted-poster style) ---------- */
+
+#summary-stats {
+  background: var(--paper);
+  border: var(--outline);
+  border-radius: 6px;
+  box-shadow: var(--shadow), inset 0 0 0 4px var(--paper), inset 0 0 0 6px var(--sand-dark);
+  padding: 1.3rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+}
+
+#summary-stats .stat {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+#summary-stats output {
+  font-weight: bold;
+}
+
+#summary-badge {
+  justify-content: center;
+  font-weight: bold;
+  color: #8a6d1a;
+}
+
+#initials-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: bold;
+}
+
+#initials-input {
+  font: inherit;
+  font-size: 2rem;
+  font-weight: bold;
+  width: 6ch;
+  text-align: center;
+  text-transform: uppercase;
+  border: var(--outline);
+  border-radius: var(--radius);
+  background: var(--paper);
+  padding: 0.4rem;
+}
+
+/* ---------- High scores (arcade table) ---------- */
+
+#highscore-list {
+  background: var(--paper);
+  border: var(--outline);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin: 0;
+  padding: 1rem 1.2rem 1rem 3rem;
+  width: min(90%, 360px);
+  font-size: 1.15rem;
+  font-weight: bold;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+#highscore-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.35rem 0;
+  border-bottom: 2px dashed rgba(58, 42, 26, 0.15);
+}
+
+#highscore-list li:last-child {
+  border-bottom: none;
+}
+
+#highscore-list li:nth-child(1)::marker { color: var(--gold); }
+#highscore-list li:nth-child(1) { color: #8a6d1a; }
+#highscore-list li:nth-child(2) { color: #6e6e6e; }
+#highscore-list li:nth-child(3) { color: #9c5a2d; }
+
+/* ---------- Decorative tumbleweeds ----------
+   Parent rolls across the screen (translate x), the body spins and hops with
+   independent `rotate`/`translate` animations — three sizes, three tempos.
+   Negative delays so they're already mid-journey on load. */
+
+.tumbleweed {
+  position: absolute;
+  bottom: 4.5%;
+  left: -70px;
+  animation: tumble 13s linear infinite;
+  pointer-events: none;
+}
+
+.tumbleweed .tw-body {
+  width: 100%;
+  height: 100%;
+  background: url("../assets/tumbleweed.svg") no-repeat center / contain;
+  animation: tw-spin 1.5s linear infinite, tw-hop 0.85s ease-in-out infinite;
+}
+
+.tw-1 { width: 46px; height: 46px; }
+
+.tw-2 {
+  width: 28px;
+  height: 28px;
+  bottom: 4%;
+  animation-duration: 19s;
+  animation-delay: -7s;
+  opacity: 0.85;
+}
+
+.tw-2 .tw-body { animation-duration: 1s, 0.6s; }
+
+.tw-3 {
+  width: 60px;
+  height: 60px;
+  bottom: 5.5%;
+  animation-duration: 10s;
+  animation-delay: -12s;
+}
+
+.tw-3 .tw-body { animation-duration: 2s, 1.1s; }
+
+@keyframes tumble {
+  from { translate: 0 0; }
+  to { translate: calc(100vw + 150px) 0; }
+}
+
+@keyframes tw-spin {
+  to { rotate: 360deg; }
+}
+
+@keyframes tw-hop {
+  0%, 55%, 100% { translate: 0 0; }
+  25% { translate: 0 -14px; }
+  78% { translate: 0 -5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tumbleweed,
+  .tumbleweed .tw-body { animation: none; visibility: hidden; }
+}
+
+/* ---------- Landscape (Chromebooks, 1366×768 etc.) ---------- */
+
+@media (orientation: landscape) and (min-width: 900px) {
+  #app {
+    max-width: none;
+  }
+
+  /* Stage on the left, question + answers on the right; HUD across the top. */
+  #screen-game {
+    display: grid;
+    grid-template:
+      "hud hud" auto
+      "stage question" 1fr / 1.1fr 1fr;
+    align-items: center;
+    column-gap: 1.5rem;
+    padding: 1rem 2rem;
+  }
+
+  #hud { grid-area: hud; }
+  #duel-stage { grid-area: stage; height: 100%; }
+  #question-area { grid-area: question; }
+
+  .menu {
+    width: 340px;
+  }
+}
